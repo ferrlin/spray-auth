@@ -30,7 +30,7 @@ object Settings {
     description           := "A library that provides several authentication- and authorization-related features for Spray-based applications.",
     startYear             := Some(2014),
     licenses              := Seq("Apache 2" -> new URL("http://www.apache.org/licenses/LICENSE-2.0.txt")),
-    scalaVersion          := "2.10.3",
+    scalaVersion          := "2.10.4",
     resolvers             ++= Dependencies.resolvers,
     scalacOptions         := Seq(
       "-encoding", "utf8",
@@ -54,7 +54,7 @@ object Dependencies {
   )
 
   val akkaVersion  = "2.3.0"
-  val sprayVersion = "1.3.0"
+  val sprayVersion = "1.3.1"
 
   val akkaActor    = "com.typesafe.akka"  %%  "akka-actor"       % akkaVersion
   val akkaSlf4j    = "com.typesafe.akka"  %%  "akka-slf4j"       % akkaVersion
