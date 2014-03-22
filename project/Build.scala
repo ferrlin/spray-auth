@@ -10,8 +10,10 @@ object Build extends Build {
   lazy val sprayAuth = Project("spray-auth", file("."))
                          .settings(basicSettings: _*)
                          .settings(libraryDependencies ++=
+                            compile(akkaActor) ++
                             compile(sprayRouting) ++
                             compile(sprayJson) ++
+                            compile(base64) ++
                             test(sprayTestKit) ++
                             test(akkaTestKit) ++
                             test(specs2)
