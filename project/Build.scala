@@ -14,7 +14,7 @@ object Build extends Build {
       compile(akkaHttp) ++
       compile(akkaHttpCore) ++
       compile(base64) ++
-      // test(sprayTestKit) ++
+      compile(sprayJson) ++
       test(akkaTestKit) ++
       test(specs2))
 }
@@ -58,6 +58,7 @@ object Dependencies {
   val akkaStream = "com.typesafe.akka" %% "akka-stream-experimental" % akkaHttpVersion
   val akkaHttpCore = "com.typesafe.akka" %% "akka-http-core-experimental" % akkaHttpVersion
   val akkaHttp = "com.typesafe.akka" %% "akka-http-experimental" % akkaHttpVersion
+  val sprayJson = "io.spray" %% "spray-json" % "1.3.2"
   val base64 = "me.lessis" %% "base64" % "0.2.0"
   val logback = "ch.qos.logback" % "logback-classic" % "1.1.1"
   val specs2 = "org.specs2" %% "specs2-core" % "3.6" //"2.3.10"

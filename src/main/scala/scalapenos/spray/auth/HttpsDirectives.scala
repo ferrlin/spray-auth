@@ -1,11 +1,15 @@
 package scalapenos.spray.auth
 
-import spray.routing._
-import spray.routing.Directives._
-import spray.http.HttpHeaders.RawHeader
-import spray.http.StatusCode
-import spray.http.StatusCodes._
-
+// import spray.routing._
+import akka.http.scaladsl.server._
+import akka.http.scaladsl.server.Directives._
+// import spray.routing.Directives._
+import akka.http.scaladsl.model.headers.RawHeader
+// import spray.http.HttpHeaders.RawHeader
+import akka.http.scaladsl.model.StatusCode
+// import spray.http.StatusCode
+import akka.http.scaladsl.model.StatusCodes._
+// import spray.http.StatusCodes._
 
 trait HttpsDirectives {
   import HttpsDirectives._
@@ -17,20 +21,21 @@ trait HttpsDirectives {
 
   def enforceHttps: Directive0 = {
     respondWithHeader(StrictTransportSecurity) &
-    extract(isHttpsRequest).flatMap(
-      if (_) pass
-      else redirectToHttps
-    )
+      extract(isHttpsRequest).flatMap(
+        if (_) pass
+        else redirectToHttps)
   }
 
   def redirectToHttps: Directive0 = {
-    requestUri.flatMap { uri =>
+    // requestUri.flatMap { uri =>
+    // redirect(uri.copy(scheme = "https"), MovedPermanently)
+    // }
+    extractUri.flatMap { uri =>
       redirect(uri.copy(scheme = "https"), MovedPermanently)
     }
   }
 
 }
-
 
 object HttpsDirectives {
   /** Hardcoded max-age of one year (31536000 seconds) for now. */

@@ -3,9 +3,10 @@ package scalapenos.spray.auth
 import concurrent._
 import concurrent.Future._
 
-import spray.routing._
-import spray.routing.authentication._
-
+// import spray.routing._
+import akka.http.scaladsl._
+// import akka.http.scaladsl.
+// import spray.routing.authentication._
 
 /**
  * Simple wrapper around the Spray routing ContextAuthenticator type to
@@ -17,29 +18,28 @@ import spray.routing.authentication._
  *   type ContextAuthenticator[T] = RequestContext => Future[Authentication[T]]
  *
  */
-abstract class Authenticator[T] extends ContextAuthenticator[T] {
-  /**
-   * Function to make Authenticators composable, i.e. to create a new Authenticator
-   * that wraps two others and that will try the second one if the first one fails
-   * to authenticate the request.
-   */
-  def orElse(other: Authenticator[T])(implicit ec: ExecutionContext): Authenticator[T] = {
-    new Authenticator[T] {
-      def apply(requestContext: RequestContext): Future[Authentication[T]] = {
-        // We need to explicitly specify the 'super' apply method from the surrounding
-        // class so we can call it without calling ourselves recursively by accident
-        Authenticator.this.apply(requestContext).flatMap {
-          case Left(rejection) => other.apply(requestContext)
-          case success @ Right(_) => successful(success)
-        }
-      }
-    }
-  }
-}
-
+// abstract class Authenticator[T] extends ContextAuthenticator[T] {
+/**
+ * Function to make Authenticators composable, i.e. to create a new Authenticator
+ * that wraps two others and that will try the second one if the first one fails
+ * to authenticate the request.
+ */
+// def orElse(other: Authenticator[T])(implicit ec: ExecutionContext): Authenticator[T] = {
+// new Authenticator[T] {
+// def apply(requestContext: RequestContext): Future[Authentication[T]] = {
+// We need to explicitly specify the 'super' apply method from the surrounding
+// class so we can call it without calling ourselves recursively by accident
+// Authenticator.this.apply(requestContext).flatMap {
+// case Left(rejection) => other.apply(requestContext)
+// case success @ Right(_) => successful(success)
+// }
+// }
+// }
+// }
+// }
 
 /** If anything goes wrong during authentication, this is the rejection to use. */
-case object AuthenticatorRejection extends Rejection
+// case object AuthenticatorRejection extends Rejection
 
 /** Custom RejectionHandler for dealing with AuthenticatorRejections. */
 // object AuthenticatorRejectionHandler {
