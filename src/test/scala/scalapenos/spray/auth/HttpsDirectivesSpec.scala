@@ -1,8 +1,8 @@
 package scalapenos.spray.auth
 package web
 
-import org.specs2.mutable.Specification
-
+// import org.specs2.mutable.Specification
+import org.scalatest._
 // import spray.http._
 // import spray.http.HttpHeaders._
 import akka.http.scaladsl.model.headers._
@@ -13,88 +13,86 @@ import akka.http.scaladsl.server._
 import akka.http.scaladsl.model._
 // import spray.routing.Directives._
 import akka.http.scaladsl.server.Directives._
+// import akka.http.scaladsl.testkit.ScalatestRouteTest
+// import akka.http.scaladsl.testkit.RouteSpec
+import akka.http.scaladsl.testkit.ScalatestRouteTest
 // import spray.testkit.Specs2RouteTest
-// import akka.http.scaladsl.testkit.RouteTest
 // import akka.http.scaladsl.testkit.ScalatestRouteTest
 
 import HttpsDirectives._
 
-class HttpsDirectivesSpec extends Specification
-  with RouteTest
+class HttpsDirectivesSpec extends FlatSpec
+  with Matchers
+  with ScalatestRouteTest
   with HttpsDirectives {
 
   val httpUri = Uri("http://example.com/api/awesome")
   val httpsUri = Uri("https://example.com/api/awesome")
 
-  /*"The enforceHttps directive" should {
-    val route = enforceHttps {
-      complete(OK)
-    }
+  val route = enforceHttps {
+    complete(OK)
+  }
 
-    "allow https requests and respond with the HSTS header" in {
-      Get(httpsUri) ~> route ~> check {
-        status === OK
-        header(StrictTransportSecurity.name) must beSome(StrictTransportSecurity)
-      }
-    }
-
-    "allow terminated https requests containing a 'X-Forwarded-Proto' header and respond with the HSTS header" in {
-      Get(httpUri) ~> addHeader(RawHeader("X-Forwarded-Proto", "https")) ~> route ~> check {
-        status === OK
-        header(StrictTransportSecurity.name) must beSome(StrictTransportSecurity)
-      }
-    }
-
-    "redirect plain http requests to the matching https URI" in {
-      Get(httpUri) ~> route ~> check {
-        status === MovedPermanently
-        header[Location].map(l => Uri(l.value)) must beSome(httpsUri)
-        header(StrictTransportSecurity.name) must beSome(StrictTransportSecurity)
-      }
-    }
-
-    "redirect terminated http requests to the matching https URI" in {
-      Get(httpUri) ~> addHeader(RawHeader("X-Forwarded-Proto", "http")) ~> route ~> check {
-        status === MovedPermanently
-        header[Location].map(l => Uri(l.value)) must beSome(httpsUri)
-        header(StrictTransportSecurity.name) must beSome(StrictTransportSecurity)
-      }
+  /* Scalatest version*/
+  "The enforceHttps Directive" should "allow https requests and respond with the HSTS header" in {
+    Get(httpsUri) ~> route ~> check {
+      status === OK
+      header(StrictTransportSecurity.name) shouldBe Some(StrictTransportSecurity)
     }
   }
 
-  "The enforceHttpsIf directive" should {
-    "enforce https when the argument resolves to true" in {
-      val route = enforceHttpsIf(true) {
-        complete(OK)
-      }
+  it should "allow terminated https requests containing a 'X-Forwarded-Proto' header and respond with the HSTS header" in {
+    Get(httpUri) ~> addHeader(RawHeader("X-Forwarded-Proto", "https")) ~> route ~> check {
+      status === OK
+      header(StrictTransportSecurity.name) shouldBe Some(StrictTransportSecurity)
+    }
+  }
 
-      Get(httpsUri) ~> route ~> check {
-        status === OK
-        header(StrictTransportSecurity.name) must beSome(StrictTransportSecurity)
-      }
+  it should "redirect plain http request to the matching https URI" in {
+    Get(httpUri) ~> route ~> check {
+      status === MovedPermanently
+      header[Location].map(l => Uri(l.value)) shouldBe Some(httpsUri)
+      header(StrictTransportSecurity.name) shouldBe Some(StrictTransportSecurity)
+    }
+  }
 
-      Get(httpUri) ~> route ~> check {
-        status === MovedPermanently
-        header[Location].map(l => Uri(l.value)) must beSome(httpsUri)
-        header(StrictTransportSecurity.name) must beSome(StrictTransportSecurity)
-      }
+  it should "also redirect terminated http request to the matching https URI" in {
+    Get(httpUri) ~> addHeader(RawHeader("X-Forwarded-Proto", "http")) ~> route ~> check {
+      status === MovedPermanently
+      header[Location].map(l => Uri(l.value)) shouldBe Some(httpsUri)
+      header(StrictTransportSecurity.name) shouldBe Some(StrictTransportSecurity)
+    }
+  }
+
+  val route2 = enforceHttpsIf(true) {
+    complete(OK)
+  }
+
+  "The enforceHttpsIf directive" should "enforce https when the argument resolves to true" in {
+    Get(httpsUri) ~> route2 ~> check {
+      status === OK
+      header(StrictTransportSecurity.name) shouldBe Some(StrictTransportSecurity)
     }
 
-    "not enforce https when the argument resolves to false" in {
-      val route = enforceHttpsIf(false) {
-        complete(OK)
-      }
-
-      Get(httpsUri) ~> route ~> check {
-        status === OK
-        header(StrictTransportSecurity.name) must beNone
-      }
-
-      Get(httpUri) ~> route ~> check {
-        status === OK
-        header(StrictTransportSecurity.name) must beNone
-      }
+    Get(httpUri) ~> route2 ~> check {
+      status === MovedPermanently
+      header[Location].map(l => Uri(l.value)) shouldBe Some(httpsUri)
+      header(StrictTransportSecurity.name) shouldBe Some(StrictTransportSecurity)
     }
-  }*/
+  }
 
+  val route3 = enforceHttpsIf(false) {
+    complete(OK)
+  }
+
+  it should "not enforce https when the argument resolves to false" in {
+    Get(httpsUri) ~> route3 ~> check {
+      status === OK
+      header(StrictTransportSecurity.name) shouldBe None
+    }
+    Get(httpUri) ~> route3 ~> check {
+      status === OK
+      header(StrictTransportSecurity.name) shouldBe None
+    }
+  }
 }
