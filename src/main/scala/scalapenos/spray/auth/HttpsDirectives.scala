@@ -1,15 +1,10 @@
 package scalapenos.spray.auth
 
-// import spray.routing._
 import akka.http.scaladsl.server._
 import akka.http.scaladsl.server.Directives._
-// import spray.routing.Directives._
 import akka.http.scaladsl.model.headers.RawHeader
-// import spray.http.HttpHeaders.RawHeader
 import akka.http.scaladsl.model.StatusCode
-// import spray.http.StatusCode
 import akka.http.scaladsl.model.StatusCodes._
-// import spray.http.StatusCodes._
 
 trait HttpsDirectives {
   import HttpsDirectives._
@@ -27,14 +22,10 @@ trait HttpsDirectives {
   }
 
   def redirectToHttps: Directive0 = {
-    // requestUri.flatMap { uri =>
-    // redirect(uri.copy(scheme = "https"), MovedPermanently)
-    // }
     extractUri.flatMap { uri =>
       redirect(uri.copy(scheme = "https"), MovedPermanently)
     }
   }
-
 }
 
 object HttpsDirectives {
