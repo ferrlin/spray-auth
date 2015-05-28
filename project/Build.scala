@@ -16,6 +16,7 @@ object Build extends Build {
       compile(base64) ++
       compile(sprayJson) ++
       test(akkaTestKit) ++
+      test(scalatest) ++
       test(specs2))
 }
 
@@ -51,6 +52,8 @@ object Dependencies {
 
   val akkaVersion = "2.3.11"
   val akkaHttpVersion = "1.0-RC3"
+  val scalatestVersion = "2.2.4"
+  val specs2Version = "3.6"
 
   val akkaActor = "com.typesafe.akka" %% "akka-actor" % akkaVersion
   val akkaSlf4j = "com.typesafe.akka" %% "akka-slf4j" % akkaVersion
@@ -61,7 +64,8 @@ object Dependencies {
   val sprayJson = "io.spray" %% "spray-json" % "1.3.2"
   val base64 = "me.lessis" %% "base64" % "0.2.0"
   val logback = "ch.qos.logback" % "logback-classic" % "1.1.1"
-  val specs2 = "org.specs2" %% "specs2-core" % "3.6" //"2.3.10"
+  val scalatest = "org.scalatest" %% "scalatest" % scalatestVersion
+  val specs2 = "org.specs2" %% "specs2-core" % specs2Version //"2.3.10"
 
   def compile(deps: ModuleID*): Seq[ModuleID] = deps map (_ % "compile")
   def provided(deps: ModuleID*): Seq[ModuleID] = deps map (_ % "provided")
